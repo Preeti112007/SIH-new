@@ -219,3 +219,26 @@ button, input, select, textarea, .gov-panel, .gov-table, .gov-btn-primary, .gov-
   }
 }
 
+/* Scrollbar utilities */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Allow rounded utilities when explicitly requested */
+.rounded-full {
+  border-radius: 9999px !important;
+}
+.rounded-xl {
+  border-radius: 0.75rem !important;
+}
+.rounded-2xl {
+  border-radius: 1rem !important;
+}
+.rounded-lg {
+  border-radius: 0.5rem !important;
+}
+

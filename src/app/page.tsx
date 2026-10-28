@@ -16,6 +16,12 @@ export default function DashboardPage() {
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [filterPriority, setFilterPriority] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [ghostBouncing, setGhostBouncing] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setGhostBouncing(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     fetchComplaints();
@@ -112,21 +118,28 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* PROMPT 1 - Dashboard Banner Fix */}
-      <div className="bg-red-50 border border-red-200 text-red-800 p-3 rounded-xl font-semibold text-sm">
+      {/* PROMPT 4 - Sticky Ghost 87% Banner with LIVE pulse */}
+      <div
+        className={`sticky top-0 z-40 bg-red-50 border-2 border-red-500 text-red-900 p-3 rounded-xl shadow-md transition-all ${
+          ghostBouncing ? 'animate-bounce' : ''
+        }`}
+      >
         <div className="flex flex-wrap justify-between items-center gap-2">
-          <div>
-            <div className="flex items-center gap-1.5 text-[14px]">
-              <span>🔴</span>
-              <span>Ghost 87% - Same Door No. 10 Koramangala, Name 82% similar, Same Trust ABC, Same Pincode 560034</span>
+          <div className="flex-1">
+            <div className="flex items-center flex-wrap gap-1.5 text-[14px] font-bold">
+              <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[11px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider mr-1 shadow-sm">
+                <span className="inline-block w-2 h-2 bg-white rounded-full animate-ping"></span>
+                LIVE
+              </span>
+              <span>Ghost 87% - Same Door No.10 Koramangala, Name 82% similar, Same Trust ABC, Same Pincode 560034 - Match PG-104 vs RB-208</span>
             </div>
-            <div className="text-xs text-gray-500 mt-0.5 ml-6">
-              Match found between PG-104 and RB-208 | Cross-Bureau Deduplication
+            <div className="text-xs text-red-700 mt-0.5 font-medium ml-0 sm:ml-1">
+              Cross-Bureau Deduplication | 100% Address Match (Door #10) | 100% Trust Match (TR-56001) | Potential Regulatory Arbitrage Flagged
             </div>
           </div>
           <Link
             href="/institution-search?q=ABC+Institute+of+Technology"
-            className="no-print text-xs bg-red-700 hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded-lg whitespace-nowrap"
+            className="no-print text-xs bg-red-700 hover:bg-red-800 text-white font-bold px-3.5 py-1.5 rounded-lg whitespace-nowrap shadow-sm transition-colors"
           >
             Review Match →
           </Link>
@@ -157,15 +170,25 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* Middle: Progress bar: Approved 80k vs Charged 1.2L visual bar - 80k green 66%, 40k excess red 33% */}
+        {/* Middle: Progress bar: Approved 80k vs Charged 1.2L visual bar */}
         <div>
-          <div className="flex justify-between text-[11.5px] font-semibold text-gray-700 mb-0.5">
-            <span className="text-green-800">Approved Ceiling: ₹80,000 (66.7%)</span>
+          <div className="flex justify-between text-[11.5px] font-semibold text-gray-700 mb-1">
+            <span className="text-green-800 font-bold">Approved Ceiling: ₹80,000 (66.7%)</span>
             <span className="text-red-700 font-bold">Unapproved Surcharge: +₹40,000 (33.3%)</span>
           </div>
-          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden flex">
-            <div className="bg-green-600 h-full w-[66.7%]" title="Approved Fee: ₹80,000"></div>
-            <div className="bg-red-600 h-full w-[33.3%]" title="Excess Fee: ₹40,000"></div>
+          <div className="w-full flex h-5 rounded-full overflow-hidden shadow-sm bg-gray-200 border border-gray-300">
+            <div
+              className="bg-green-600 h-full w-[66.7%] flex items-center justify-center text-white text-xs font-bold transition-all duration-500 shadow-inner px-2"
+              title="Approved Ceiling: ₹80,000 (66.7%)"
+            >
+              ₹80,000 (66.7%)
+            </div>
+            <div
+              className="bg-red-600 h-full w-[33.3%] flex items-center justify-center text-white text-xs font-bold transition-all duration-500 shadow-inner px-2"
+              title="Unapproved Surcharge: +₹40,000 (33.3%)"
+            >
+              +₹40,000 (33.3%)
+            </div>
           </div>
         </div>
 

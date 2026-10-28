@@ -21,6 +21,16 @@ export interface NicSmsLog {
 export default function NicSmsGatewayPanel() {
   const [selectedLadderStep, setSelectedLadderStep] = useState<string>('T-7');
   const [envMode, setEnvMode] = useState<'demo' | 'prod'>('demo');
+  const [copiedHash, setCopiedHash] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string, id: string) => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedHash(id);
+      setTimeout(() => setCopiedHash(null), 2000);
+    }
+  };
+
   const [logs, setLogs] = useState<NicSmsLog[]>([
     {
       id: 'SMS-1234',
@@ -247,17 +257,26 @@ export default function NicSmsGatewayPanel() {
           </div>
 
           {/* Live Proof Console */}
-          <div className="mt-3 bg-[#0f172a] text-green-400 p-2.5 rounded font-mono text-[11px] overflow-x-auto border border-gray-800">
-            <div className="text-gray-400 text-[10px] pb-1 border-b border-gray-700 flex justify-between">
-              <span>NIC Gateway Telemetry Console:</span>
-              <span className="text-amber-400">{envMode === 'demo' ? 'MODE: AUDIT_CHAIN_LOG' : 'MODE: HTTPS_DIRECT_GATEWAY'}</span>
+          <div className="mt-3 bg-black text-green-400 p-3 rounded font-mono text-xs overflow-x-auto border border-gray-800 shadow-md">
+            <div className="text-gray-400 text-[10.5px] pb-1.5 border-b border-gray-800 flex justify-between items-center">
+              <span className="font-semibold text-gray-300">NIC Gateway Telemetry Console:</span>
+              <span className="text-amber-400 font-bold">{envMode === 'demo' ? 'MODE: AUDIT_CHAIN_LOG' : 'MODE: HTTPS_DIRECT_GATEWAY'}</span>
             </div>
-            <div className="mt-1 space-y-0.5">
+            <div className="mt-1.5 space-y-1">
               <div>[NIC SMS] Queued: To {logs[0]?.recipientMasked} | DLT {logs[0]?.dltTemplateId} | ID {logs[0]?.id}</div>
-              <div className="text-cyan-300">
-                Block #{logs[0]?.blockNumber} Hash: {logs[0]?.blockHash.slice(0, 16)}... | Prev: {logs[0]?.prevHash.slice(0, 14)}...
+              <div
+                onClick={() => copyToClipboard(logs[0]?.blockHash || '', 'console-hash')}
+                className="text-cyan-300 hover:text-green-300 cursor-pointer flex flex-wrap items-center justify-between gap-1 group transition-colors py-0.5 bg-gray-950 px-2 rounded border border-gray-800"
+                title={`Full Current Block Hash: ${logs[0]?.blockHash}\nPrev Hash: ${logs[0]?.prevHash}\nClick to copy full hash`}
+              >
+                <span>
+                  Block #{logs[0]?.blockNumber} Hash: <span className="underline decoration-dotted font-bold">{logs[0]?.blockHash.slice(0, 16)}...</span> | Prev: {logs[0]?.prevHash.slice(0, 14)}...
+                </span>
+                <span className="text-[10px] text-gray-400 group-hover:text-green-400 font-sans bg-gray-900 border border-gray-700 px-1.5 py-0.5 rounded">
+                  {copiedHash === 'console-hash' ? '✓ Copied!' : '📋 Click to copy'}
+                </span>
               </div>
-              <div className="text-gray-400">
+              <div className="text-gray-400 text-[11px]">
                 Data: SMS SENT | FDR-001 | 2-of-3 | DLT {logs[0]?.dltTemplateId} | Consent C-104 | Merkle Root: {logs[0]?.merkleRoot.slice(0, 16)}...
               </div>
             </div>
@@ -295,9 +314,28 @@ export default function NicSmsGatewayPanel() {
                   </span>
                   <div className="text-[10px] text-gray-500 mt-0.5">{log.dpdpSection}</div>
                 </td>
-                <td className="font-mono text-[10.5px] text-gray-600">
-                  <div>Block #{log.blockNumber} (Hash: {log.blockHash.slice(0, 10)}...)</div>
-                  <div className="text-[10px] text-gray-400">Root: {log.merkleRoot.slice(0, 12)}...</div>
+                <td className="font-mono text-[11px] text-gray-700">
+                  <div
+                    className="flex items-center gap-1 group cursor-pointer"
+                    title={`Full Block Hash: ${log.blockHash}\nPrev Hash: ${log.prevHash}\nMerkle Root: ${log.merkleRoot}\n(Click to copy)`}
+                    onClick={() => copyToClipboard(log.blockHash, log.id)}
+                  >
+                    <span className="font-bold text-[#002147]">Block #{log.blockNumber}</span>
+                    <span className="text-gray-600 font-semibold">(Hash: {log.blockHash.slice(0, 8)}...)</span>
+                    <button
+                      type="button"
+                      className="text-[10px] text-blue-700 hover:text-blue-900 px-1 py-0.5 bg-blue-50 border border-blue-200 rounded font-sans inline-flex items-center ml-0.5"
+                      title="Copy full cryptographic block hash"
+                    >
+                      {copiedHash === log.id ? '✓ Copied' : '📋'}
+                    </button>
+                  </div>
+                  <div
+                    className="text-[10px] text-gray-500 hover:text-gray-800 cursor-help mt-0.5"
+                    title={`Full Merkle Root: ${log.merkleRoot}`}
+                  >
+                    Root: {log.merkleRoot.slice(0, 14)}...
+                  </div>
                 </td>
                 <td>
                   <span

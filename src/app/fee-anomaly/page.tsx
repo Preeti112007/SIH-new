@@ -222,15 +222,25 @@ export default function FeeAnomalyPage() {
           </button>
         </div>
 
-        {/* Middle: Progress bar: Approved 80k vs Charged 1.2L visual bar - 80k green 66%, 40k excess red 33% */}
+        {/* Middle: Progress bar: Approved 80k vs Charged 1.2L visual bar */}
         <div>
-          <div className="flex justify-between text-[11.5px] font-semibold text-gray-700 mb-0.5">
-            <span className="text-green-800">Approved Ceiling: ₹80,000 (66.7%)</span>
+          <div className="flex justify-between text-[11.5px] font-semibold text-gray-700 mb-1">
+            <span className="text-green-800 font-bold">Approved Ceiling: ₹80,000 (66.7%)</span>
             <span className="text-red-700 font-bold">Unapproved Surcharge: +₹40,000 (33.3%)</span>
           </div>
-          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden flex">
-            <div className="bg-green-600 h-full w-[66.7%]" title="Approved Fee: ₹80,000"></div>
-            <div className="bg-red-600 h-full w-[33.3%]" title="Excess Surcharge: ₹40,000"></div>
+          <div className="w-full flex h-5 rounded-full overflow-hidden shadow-sm bg-gray-200 border border-gray-300">
+            <div
+              className="bg-green-600 h-full w-[66.7%] flex items-center justify-center text-white text-xs font-bold transition-all duration-500 shadow-inner px-2"
+              title="Approved Ceiling: ₹80,000 (66.7%)"
+            >
+              ₹80,000 (66.7%)
+            </div>
+            <div
+              className="bg-red-600 h-full w-[33.3%] flex items-center justify-center text-white text-xs font-bold transition-all duration-500 shadow-inner px-2"
+              title="Unapproved Surcharge: +₹40,000 (33.3%)"
+            >
+              +₹40,000 (33.3%)
+            </div>
           </div>
         </div>
 
