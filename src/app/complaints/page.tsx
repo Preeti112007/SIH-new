@@ -238,7 +238,7 @@ export default function ComplaintRegisterPage() {
                 <div className="text-[14px] font-bold text-[#002147]">
                   {selectedComplaint.subject}
                 </div>
-                <div className="text-gray-600 text-xs">
+                <div className="text-gray-600 text-xs" suppressHydrationWarning>
                   Category: <strong>{selectedComplaint.category}</strong> | Submitted:{' '}
                   {new Date(selectedComplaint.submissionDate).toLocaleDateString('en-IN', {
                     day: '2-digit',

@@ -159,7 +159,7 @@ export default function AuditLogPage() {
 
                 return (
                   <tr key={log.id}>
-                    <td className="font-mono text-gray-700 whitespace-nowrap">{dateStr}</td>
+                    <td className="font-mono text-gray-700 whitespace-nowrap" suppressHydrationWarning>{dateStr}</td>
                     <td className="font-bold text-[#002147]">{log.actorName}</td>
                     <td>
                       <span className="bg-gray-100 px-1 py-0.2 font-semibold text-gray-800 border border-gray-300">

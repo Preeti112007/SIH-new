@@ -415,14 +415,14 @@ export default function DashboardPage() {
                         </div>
                       </td>
                       <td>
-                        <div className={isOverdue ? 'text-red-700 font-bold' : 'text-gray-800'}>
+                        <div className={isOverdue ? 'text-red-700 font-bold' : 'text-gray-800'} suppressHydrationWarning>
                           {deadlineDate.toLocaleDateString('en-IN', {
                             day: '2-digit',
                             month: 'short',
                             year: 'numeric',
                           })}
                         </div>
-                        <div className="text-[11px]">
+                        <div className="text-[11px]" suppressHydrationWarning>
                           {isOverdue ? (
                             <span className="text-[#991b1b] font-bold">
                               {t.overdueByDays} {Math.abs(daysRemaining)} d

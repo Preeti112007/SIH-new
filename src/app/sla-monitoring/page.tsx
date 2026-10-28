@@ -208,9 +208,9 @@ export default function SlaMonitoringPage() {
                       <div className="font-semibold text-gray-900">{row.institution.name}</div>
                       <div className="text-[11px] text-gray-500">{row.institution.city}</div>
                     </td>
-                    <td>{subDateStr}</td>
-                    <td>{deadlineStr}</td>
-                    <td>
+                    <td suppressHydrationWarning>{subDateStr}</td>
+                    <td suppressHydrationWarning>{deadlineStr}</td>
+                    <td suppressHydrationWarning>
                       {row.tier === 'OVERDUE' ? (
                         <span className="bg-red-700 text-white font-bold text-[11px] px-1.5 py-0.5">
                           OVERDUE by {Math.abs(row.diffDays)} Days

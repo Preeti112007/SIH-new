@@ -291,7 +291,7 @@ export default function CoordinationWorkspacePage() {
                         <span className="font-bold text-[#002147] text-xs">
                           {event.title}
                         </span>
-                        <span className="text-[11px] text-gray-500">
+                        <span className="text-[11px] text-gray-500" suppressHydrationWarning>
                           {new Date(event.date).toLocaleDateString('en-IN', {
                             day: '2-digit',
                             month: 'short',
@@ -370,7 +370,7 @@ export default function CoordinationWorkspacePage() {
                     <span className="font-bold text-[#002147]">
                       {n.officerName} ({n.officerDesignation} - {n.bureau})
                     </span>
-                    <span className="text-gray-500">
+                    <span className="text-gray-500" suppressHydrationWarning>
                       {new Date(n.createdAt).toLocaleDateString('en-IN', {
                         day: '2-digit',
                         month: 'short',

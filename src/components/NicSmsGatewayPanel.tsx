@@ -24,7 +24,7 @@ export default function NicSmsGatewayPanel() {
   const [logs, setLogs] = useState<NicSmsLog[]>([
     {
       id: 'SMS-1234',
-      timestamp: new Date(Date.now() - 3600000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+      timestamp: '09:00 PM',
       recipientMasked: '98XXXXXX10',
       templateName: 'AICTE SLA Escalation',
       dltTemplateId: '120716892106',
@@ -40,7 +40,7 @@ export default function NicSmsGatewayPanel() {
     {
       id: 'SMS-1235',
       recipientMasked: '98XXXXXX11',
-      timestamp: new Date(Date.now() - 1800000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+      timestamp: '09:30 PM',
       templateName: 'Release 2-of-3 Authorization',
       dltTemplateId: '120716892105',
       messageContent: 'FDR Release FDR-001 needs your signature. 2-of-3 required. Verify at portal. Reply STOP to opt-out. -FDR Trust',
@@ -283,7 +283,7 @@ export default function NicSmsGatewayPanel() {
             {logs.map((log) => (
               <tr key={log.id}>
                 <td className="font-bold font-mono text-[#002147]">{log.id}</td>
-                <td className="text-gray-600">{log.timestamp}</td>
+                <td className="text-gray-600" suppressHydrationWarning>{log.timestamp}</td>
                 <td className="font-mono font-bold text-gray-900">{log.recipientMasked}</td>
                 <td>
                   <div className="font-semibold text-gray-800">{log.templateName}</div>
