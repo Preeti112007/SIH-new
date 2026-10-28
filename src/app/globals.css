@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* MANDATORY REQUIREMENT: Strictly enforce Times New Roman throughout the application */
+*, *::before, *::after, html, body, input, button, select, textarea, table, th, td, span, p, h1, h2, h3, h4, h5, h6 {
+  font-family: "Times New Roman", Times, Georgia, serif !important;
+}
+
+:root {
+  --color-gov-navy: #002147;
+  --color-gov-saffron: #e67300;
+  --color-gov-green: #138808;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f4f6f8;
+  --border-color: #cbd5e1;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+}
+
+body {
+  background-color: #f4f6f8;
+  color: #111827;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Saffron - White - Green Decorative Header Ribbon */
+.tricolor-ribbon {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    #ff9933 0%,
+    #ff9933 33.33%,
+    #ffffff 33.33%,
+    #ffffff 66.66%,
+    #138808 66.66%,
+    #138808 100%
+  );
+  width: 100%;
+}
+
+/* Government Dense Table Styles */
+.gov-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+
+.gov-table th {
+  background-color: #002147;
+  color: #ffffff;
+  font-weight: 700;
+  text-align: left;
+  padding: 7px 10px;
+  border: 1px solid #1e3a5f;
+  letter-spacing: 0.2px;
+}
+
+.gov-table th.sub-th {
+  background-color: #e2e8f0;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+.gov-table td {
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.gov-table tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.gov-table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Button & Field Styles - Strictly rectangular, formal */
+.gov-btn-primary {
+  background-color: #002147;
+  color: #ffffff;
+  border: 1px solid #001630;
+  padding: 5px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+}
+
+.gov-btn-primary:hover {
+  background-color: #0a3871;
+}
+
+.gov-btn-secondary {
+  background-color: #ffffff;
+  color: #002147;
+  border: 1px solid #002147;
+  padding: 5px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+}
+
+.gov-btn-secondary:hover {
+  background-color: #f1f5f9;
+}
+
+.gov-btn-saffron {
+  background-color: #e67300;
+  color: #ffffff;
+  border: 1px solid #b45309;
+  padding: 5px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+}
+
+.gov-btn-saffron:hover {
+  background-color: #cc6600;
+}
+
+.gov-btn-danger {
+  background-color: #991b1b;
+  color: #ffffff;
+  border: 1px solid #7f1d1d;
+  padding: 5px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 13.5px;
+}
+
+.gov-input, .gov-select {
+  border: 1px solid #94a3b8;
+  padding: 5px 8px;
+  font-size: 13.5px;
+  background-color: #ffffff;
+  color: #111827;
+}
+
+.gov-input:focus, .gov-select:focus {
+  outline: 2px solid #002147;
+  border-color: #002147;
+}
+
+/* Formal Panel / Card styling with thin borders */
+.gov-panel {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: none;
+}
+
+.gov-panel-header {
+  background-color: #f1f5f9;
+  border-bottom: 2px solid #002147;
+  padding: 8px 12px;
+  font-weight: 700;
+  color: #002147;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Print Stylesheet for PDF Dossier & Browser Print */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .gov-table th {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .gov-panel {
+    border: 1px solid #000000 !important;
+  }
+}

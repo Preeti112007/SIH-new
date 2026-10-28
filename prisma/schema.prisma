@@ -1,0 +1,149 @@
+// Prisma Schema for AICTE Unified Case Coordination Radar
+// Compatible with both SQLite (zero-config local demo) and PostgreSQL (enterprise deployment)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // Change to "postgresql" for production PostgreSQL deployment
+  url      = env("DATABASE_URL")
+}
+
+model Trust {
+  id              String        @id @default(cuid())
+  trustId         String        @unique // e.g., TR-56001
+  name            String
+  registrationNo  String
+  registeredState String
+  registeredCity  String
+  trusteeNames    String // JSON string or comma-separated
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  institutions    Institution[]
+}
+
+model Institution {
+  id              String       @id @default(cuid())
+  aicteId         String       @unique // e.g., 1-932145561
+  name            String
+  category        String // Engineering, Management, Pharmacy, Polytechnic
+  address         String
+  city            String
+  state           String
+  pinCode         String
+  contactPhone    String
+  contactEmail    String
+  trustId         String
+  trust           Trust        @relation(fields: [trustId], references: [id])
+  status          String // Approved, Under Review, Deficient
+  approvedIntake  Int          @default(300)
+  annualTuitionFee Float       @default(80000.0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  complaints      Complaint[]
+  feeRecords      FeeRecord[]
+}
+
+model Complaint {
+  id                  String               @id @default(cuid())
+  refNo               String               @unique // e.g., PG-104, RB-208
+  bureau              String // PGRC, Regulation Bureau, Approval Bureau, Vigilance Bureau, SGRC
+  submissionDate      DateTime
+  institutionId       String
+  institution         Institution          @relation(fields: [institutionId], references: [id])
+  complainantType     String // Student, Faculty, Parent, Citizen
+  complainantName     String
+  complainantContact  String
+  category            String // Fee Anomaly, Infrastructure Deficiency, Harassment, Admission Discrepancy
+  subject             String
+  details             String
+  status              String // Awaiting Review, Under Review, Escalated, Joint Inquiry, Resolved
+  priorityScore       Int                  @default(50) // 0-100 Case Coordination Priority Score
+  priorityLevel       String               @default("Medium") // Low, Medium, High, Critical
+  slaDaysTotal        Int                  @default(30)
+  slaDeadline         DateTime
+  lastResponseDate    DateTime?
+  coordinationGroupId String?
+  coordinationGroup   CoordinationGroup?   @relation(fields: [coordinationGroupId], references: [id])
+  feeRecords          FeeRecord[]
+  notes               OfficerNote[]
+  auditLogs           AuditLog[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+model FeeRecord {
+  id               String       @id @default(cuid())
+  receiptNo        String
+  complaintId      String?
+  complaint        Complaint?   @relation(fields: [complaintId], references: [id])
+  institutionId    String
+  institution      Institution  @relation(fields: [institutionId], references: [id])
+  referenceFee     Float // AICTE / State Fee Regulatory Committee benchmark (e.g. 80000)
+  reportedFee      Float // Amount claimed or extracted from receipt (e.g. 120000)
+  differenceAmount Float // 40000
+  differencePercent Float // 50.0
+  ocrConfidence    Float? // e.g. 94.5%
+  receiptText      String?
+  reviewStatus     String // Flagged for Review, Confirmed Anomaly, Cleared, Explanatory Note Filed
+  reviewedBy       String?
+  reviewRemarks    String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+model CoordinationGroup {
+  id            String       @id @default(cuid())
+  groupRef      String       @unique // e.g., CC-2026-BLR-089
+  title         String
+  leadBureau    String // PGRC
+  participating String // "PGRC, Regulation Bureau"
+  status        String // Active, Under Joint Inquiry, Show Cause Issued, Closed
+  priorityScore Int          @default(85)
+  leadOfficer   String // Dr. R. K. Sharma
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  complaints    Complaint[]
+  notes         OfficerNote[]
+}
+
+model OfficerNote {
+  id                  String             @id @default(cuid())
+  complaintId         String?
+  complaint           Complaint?         @relation(fields: [complaintId], references: [id])
+  coordinationGroupId String?
+  coordinationGroup   CoordinationGroup? @relation(fields: [coordinationGroupId], references: [id])
+  officerName         String
+  officerDesignation  String
+  bureau              String
+  noteType            String // Internal Review, Inter-Bureau Directive, Notice Issued, Field Audit
+  content             String
+  createdAt           DateTime           @default(now())
+}
+
+model AuditLog {
+  id          String     @id @default(cuid())
+  timestamp   DateTime   @default(now())
+  actorName   String
+  actorRole   String // Officer, Administrator
+  action      String // e.g. "VIEW_CASE", "MATCH_REVIEW", "NOTE_ADDED", "DOSSIER_GENERATED"
+  caseRef     String?
+  details     String
+  ipAddress   String?    @default("10.24.112.44 (Internal AICTE LAN)")
+  complaintId String?
+  complaint   Complaint? @relation(fields: [complaintId], references: [id])
+}
+
+model User {
+  id          String   @id @default(cuid())
+  username    String   @unique
+  fullName    String
+  designation String
+  bureau      String
+  role        String // Officer, Administrator
+  phone       String
+  email       String
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
