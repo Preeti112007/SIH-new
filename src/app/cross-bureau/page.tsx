@@ -52,6 +52,24 @@ export default function CrossBureauPage() {
         </p>
       </div>
 
+      {/* Ghost Banner - User's exact text */}
+      <div className="bg-[#fff5f5] border-l-4 border-[#dc2626] p-3 text-[13px] border border-gray-300 flex flex-wrap justify-between items-center">
+        <div className="font-bold text-[#991b1b] text-[13.5px]">
+          🔴 Ghost 87% - Same Door No. 10 Koramangala, Name 82% similar, Same Trust ABC, Same Pincode 560034
+        </div>
+        <div className="flex items-center gap-2 mt-2 sm:mt-0">
+          <Link href="/coordination" className="gov-btn-primary text-xs">
+            Open Coordination Workspace
+          </Link>
+          <button
+            onClick={() => window.print()}
+            className="gov-btn-secondary text-xs"
+          >
+            📄 Generate Coordination Dossier PDF
+          </button>
+        </div>
+      </div>
+
       {/* Primary Demonstration Alert: PG-104 vs RB-208 */}
       <div className="bg-[#fffdf5] border-2 border-[#e67300] p-4 text-[13px] space-y-3">
         <div className="flex justify-between items-start">
@@ -77,6 +95,12 @@ export default function CrossBureauPage() {
           <Link href="/coordination" className="gov-btn-primary text-xs">
             Open Joint Coordination Workspace (CC-2026-BLR-089) →
           </Link>
+          <button
+            onClick={() => window.print()}
+            className="gov-btn-secondary text-xs"
+          >
+            📄 Generate Coordination Dossier PDF
+          </button>
           <button
             onClick={() => setShowNoteModal(true)}
             className="gov-btn-secondary text-xs"

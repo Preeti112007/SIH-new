@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* MANDATORY REQUIREMENT: Strictly enforce Times New Roman throughout the application */
-*, *::before, *::after, html, body, input, button, select, textarea, table, th, td, span, p, h1, h2, h3, h4, h5, h6 {
+*, *::before, *::after, html, body, input, button, select, textarea, table, th, td, span, p, h1, h2, h3, h4, h5, h6, a, div {
   font-family: "Times New Roman", Times, Georgia, serif !important;
 }
 
@@ -26,6 +26,12 @@ body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Authentic Government UI Restraint: Rectangular corners, thin borders, zero glowing or floating badges */
+button, input, select, textarea, .gov-panel, .gov-table, .gov-btn-primary, .gov-btn-secondary, .gov-btn-saffron, .gov-btn-danger, span.badge {
+  border-radius: 0px !important;
+  box-shadow: none !important;
 }
 
 /* Saffron - White - Green Decorative Header Ribbon */
@@ -94,6 +100,7 @@ body {
   align-items: center;
   gap: 6px;
   font-size: 13.5px;
+  text-decoration: none;
 }
 
 .gov-btn-primary:hover {
@@ -111,6 +118,7 @@ body {
   align-items: center;
   gap: 6px;
   font-size: 13.5px;
+  text-decoration: none;
 }
 
 .gov-btn-secondary:hover {
@@ -128,6 +136,7 @@ body {
   align-items: center;
   gap: 6px;
   font-size: 13.5px;
+  text-decoration: none;
 }
 
 .gov-btn-saffron:hover {
@@ -142,6 +151,7 @@ body {
   font-weight: 700;
   cursor: pointer;
   font-size: 13.5px;
+  text-decoration: none;
 }
 
 .gov-input, .gov-select {
@@ -177,19 +187,29 @@ body {
 
 /* Print Stylesheet for PDF Dossier & Browser Print */
 @media print {
+  .no-print, header, nav, footer {
+    display: none !important;
+  }
   body {
-    background: #ffffff !important;
+    background: white !important;
     color: #000000 !important;
     font-size: 12pt;
   }
-  .no-print {
-    display: none !important;
+  .print-dossier::before {
+    content: "AICTE RADAR - Coordination Dossier - PG-104 - Confidential";
+    display: block;
+    font-weight: bold;
+    font-size: 15pt;
+    color: #002147;
+    border-bottom: 2px solid #002147;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
   }
   .print-only {
     display: block !important;
   }
   .gov-table th {
-    background-color: #000000 !important;
+    background-color: #002147 !important;
     color: #ffffff !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
@@ -198,3 +218,4 @@ body {
     border: 1px solid #000000 !important;
   }
 }
+

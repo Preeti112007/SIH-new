@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { TRANSLATIONS, Translations, SupportedLanguage } from '@/lib/translations';
 
 export interface UserProfile {
   username: string;
@@ -36,10 +37,14 @@ export const DEMO_USERS: Record<string, UserProfile> = {
 interface AppContextType {
   currentUser: UserProfile;
   switchUser: (role: 'Officer' | 'Administrator') => void;
-  fontSize: number; // in percentage, e.g. 100, 110, 90
+  fontSize: number; // percentage e.g. 100, 105, 110, 115...
   setFontSize: (size: number) => void;
-  language: 'en' | 'hi' | 'kn';
-  setLanguage: (lang: 'en' | 'hi' | 'kn') => void;
+  increaseFontSize: () => void;
+  decreaseFontSize: () => void;
+  resetFontSize: () => void;
+  language: SupportedLanguage;
+  setLanguage: (lang: SupportedLanguage) => void;
+  t: Translations;
   voiceModalOpen: boolean;
   setVoiceModalOpen: (open: boolean) => void;
   dossierModalOpen: boolean;
@@ -52,7 +57,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<UserProfile>(DEMO_USERS.officer);
   const [fontSize, setFontSizeState] = useState<number>(100);
-  const [language, setLanguage] = useState<'en' | 'hi' | 'kn'>('en');
+  const [language, setLanguage] = useState<SupportedLanguage>('en');
   const [voiceModalOpen, setVoiceModalOpen] = useState<boolean>(false);
   const [dossierModalOpen, setDossierModalOpen] = useState<boolean>(false);
 
@@ -64,12 +69,48 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const setFontSize = (size: number) => {
-    setFontSizeState(size);
+  const applyFontSizeToDom = (size: number) => {
     if (typeof document !== 'undefined') {
-      document.documentElement.style.fontSize = `${(size / 100) * 16}px`;
+      // Scale html and body font size continuously
+      const ratio = size / 100;
+      document.documentElement.style.fontSize = `${ratio * 16}px`;
+      if (document.body) {
+        document.body.style.fontSize = `${ratio * 14}px`;
+      }
     }
   };
+
+  const setFontSize = (size: number) => {
+    setFontSizeState(size);
+    applyFontSizeToDom(size);
+  };
+
+  // Continuous increase without artificial ceiling (up to 250%)
+  const increaseFontSize = () => {
+    setFontSizeState((prev) => {
+      const next = Math.min(prev + 5, 250);
+      applyFontSizeToDom(next);
+      return next;
+    });
+  };
+
+  // Continuous decrease down to 70%
+  const decreaseFontSize = () => {
+    setFontSizeState((prev) => {
+      const next = Math.max(prev - 5, 70);
+      applyFontSizeToDom(next);
+      return next;
+    });
+  };
+
+  const resetFontSize = () => {
+    setFontSizeState(100);
+    applyFontSizeToDom(100);
+  };
+
+  useEffect(() => {
+    applyFontSizeToDom(fontSize);
+  }, []);
 
   const maskSensitiveData = (value: string, type: 'phone' | 'email' = 'phone'): string => {
     if (!value) return '';
@@ -79,7 +120,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (type === 'phone') {
-      // Mask middle digits: +91-98*****399
       const cleaned = value.replace(/\s+/g, '');
       if (cleaned.length > 7) {
         const start = cleaned.slice(0, 7);
@@ -102,6 +142,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return value;
   };
 
+  const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+
   return (
     <AppContext.Provider
       value={{
@@ -109,8 +151,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         switchUser,
         fontSize,
         setFontSize,
+        increaseFontSize,
+        decreaseFontSize,
+        resetFontSize,
         language,
         setLanguage,
+        t,
         voiceModalOpen,
         setVoiceModalOpen,
         dossierModalOpen,

@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/context/AppContext';
+import { SupportedLanguage } from '@/lib/translations';
 
 export default function VoiceAssistantModal() {
   const { voiceModalOpen, setVoiceModalOpen, language, setLanguage } = useApp();
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'hi' | 'kn'>(language);
+  const [selectedLanguage, setSelectedLanguage] = useState<SupportedLanguage>(language);
   const [statusMessage, setStatusMessage] = useState('Microphone ready. Click "Start Recording" to speak.');
   const recognitionRef = useRef<any>(null);
 
@@ -39,17 +40,20 @@ export default function VoiceAssistantModal() {
       recognition.continuous = true;
       recognition.interimResults = true;
 
-      // Map language code
-      const langMap: Record<string, string> = {
+      // Map language code for all supported Indian languages
+      const langMap: Record<SupportedLanguage, string> = {
         en: 'en-IN',
         hi: 'hi-IN',
         kn: 'kn-IN',
+        ta: 'ta-IN',
+        te: 'te-IN',
+        mr: 'mr-IN',
       };
       recognition.lang = langMap[selectedLanguage] || 'en-IN';
 
       recognition.onstart = () => {
         setIsListening(true);
-        setStatusMessage(`Listening in ${selectedLanguage === 'hi' ? 'Hindi' : selectedLanguage === 'kn' ? 'Kannada' : 'English'}... Speak clearly.`);
+        setStatusMessage(`Listening in ${selectedLanguage.toUpperCase()}... Speak clearly.`);
       };
 
       recognition.onresult = (event: any) => {
@@ -148,6 +152,9 @@ export default function VoiceAssistantModal() {
                 <option value="en">English (Indian Accent - en-IN)</option>
                 <option value="hi">हिन्दी (Hindi - hi-IN)</option>
                 <option value="kn">ಕನ್ನಡ (Kannada - kn-IN)</option>
+                <option value="ta">தமிழ் (Tamil - ta-IN)</option>
+                <option value="te">తెలుగు (Telugu - te-IN)</option>
+                <option value="mr">मराठी (Marathi - mr-IN)</option>
               </select>
             </div>
 

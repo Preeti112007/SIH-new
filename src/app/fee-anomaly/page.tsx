@@ -92,17 +92,17 @@ export default function FeeAnomalyPage() {
     }
   };
 
-  const loadSampleReceiptPreset = (type: 'ABC-ENG' | 'ABC-TECH') => {
-    if (type === 'ABC-ENG') {
+  const loadSampleReceiptPreset = (type: 'ABC-ENG' | 'ABC-TECH' | 'RECEIPT-1234') => {
+    if (type === 'RECEIPT-1234' || type === 'ABC-ENG') {
       setExtractedFields({
-        receiptNo: 'REC-2026-ABC-0941',
+        receiptNo: 'Receipt No. 1234',
         institutionName: 'ABC Engineering College',
         studentName: 'Rahul M. Verma',
         course: 'B.Tech (CSE)',
         extractedFee: 120000,
         referenceFee: 80000,
-        receiptText: `ABC ENGINEERING COLLEGE\nKoramangala, Bengaluru - 560034\nDate: 12-Oct-2026\nReceipt No: REC-2026-ABC-0941\nStudent Name: Rahul M. Verma | USN: 1AB23CS089\nFee Head 1: Tuition Fee (State Approved) - Rs. 80,000\nFee Head 2: Special Lab & Development Cess - Rs. 40,000\nTotal Amount Paid: Rs. 1,20,000\nPayment Mode: RTGS Ref # UTR4491028301`,
-        remarks: 'Sample fee receipt for Complaint PG-104 loaded.',
+        receiptText: `ABC ENGINEERING COLLEGE\nKoramangala, Bengaluru - 560034\nDate: 12-Oct-2026\nReceipt No: 1234\nStudent Name: Rahul M. Verma | USN: 1AB23CS089\nFee Head 1: Tuition Fee (State Approved) - Rs. 80,000\nFee Head 2: Special Lab & Development Cess - Rs. 40,000\nTotal Amount Paid: Rs. 1,20,000\nPayment Mode: RTGS Ref # UTR4491028301`,
+        remarks: '💰 Anomaly: Approved ₹80k, Charged ₹1.2L - 50% Excess - Proof: Receipt No. 1234',
       });
     } else {
       setExtractedFields({
@@ -188,17 +188,56 @@ export default function FeeAnomalyPage() {
         <div className="flex items-center space-x-2">
           <span className="font-semibold text-gray-700">Demonstration Presets:</span>
           <button
+            onClick={() => loadSampleReceiptPreset('RECEIPT-1234')}
+            className="gov-btn-saffron text-xs"
+          >
+            Proof: Receipt No. 1234
+          </button>
+          <button
             onClick={() => loadSampleReceiptPreset('ABC-ENG')}
             className="gov-btn-secondary text-xs bg-white"
           >
-            Preset: ABC Engineering (PG-104)
+            ABC Engineering (PG-104)
           </button>
           <button
             onClick={() => loadSampleReceiptPreset('ABC-TECH')}
             className="gov-btn-secondary text-xs bg-white"
           >
-            Preset: ABC Institute (RB-208)
+            ABC Institute (RB-208)
           </button>
+        </div>
+      </div>
+
+      {/* PROMPT 3 - Fee Anomaly Card Fix */}
+      <div className="bg-yellow-50 border-yellow-300 border p-3 rounded-xl space-y-2">
+        <div className="flex flex-wrap justify-between items-center gap-2">
+          <div className="font-bold text-yellow-900 text-[14px]">
+            💰 Anomaly: Approved ₹80k, Charged ₹1.2L - 50% Excess
+          </div>
+          <button
+            onClick={() => loadSampleReceiptPreset('RECEIPT-1234')}
+            className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg transition-colors"
+          >
+            View Receipt OCR
+          </button>
+        </div>
+
+        {/* Middle: Progress bar: Approved 80k vs Charged 1.2L visual bar - 80k green 66%, 40k excess red 33% */}
+        <div>
+          <div className="flex justify-between text-[11.5px] font-semibold text-gray-700 mb-0.5">
+            <span className="text-green-800">Approved Ceiling: ₹80,000 (66.7%)</span>
+            <span className="text-red-700 font-bold">Unapproved Surcharge: +₹40,000 (33.3%)</span>
+          </div>
+          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden flex">
+            <div className="bg-green-600 h-full w-[66.7%]" title="Approved Fee: ₹80,000"></div>
+            <div className="bg-red-600 h-full w-[33.3%]" title="Excess Surcharge: ₹40,000"></div>
+          </div>
+        </div>
+
+        {/* Bottom small: Proof: Receipt No. 1234 | OCR Confidence 94% | Student: Rajesh Kumar | ABC College */}
+        <div className="text-xs text-gray-600 pt-1 border-t border-yellow-200 flex flex-wrap justify-between items-center">
+          <span>Proof: Receipt No. 1234 | OCR Confidence 94% | Student: Rajesh Kumar | ABC College</span>
+          <span className="font-bold text-yellow-900">50% Statutory Excess Flagged</span>
         </div>
       </div>
 

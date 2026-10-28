@@ -80,6 +80,20 @@ export default function InstitutionSearchPage() {
         </p>
       </div>
 
+      {/* Ghost Banner - User's exact text */}
+      <div className="bg-[#fff5f5] border-l-4 border-[#dc2626] p-3 text-[13px] border border-gray-300 flex flex-wrap justify-between items-center">
+        <div className="font-bold text-[#991b1b] text-[13.5px]">
+          🔴 Ghost 87% - Same Door No. 10 Koramangala, Name 82% similar, Same Trust ABC, Same Pincode 560034
+        </div>
+        <button
+          type="button"
+          onClick={() => loadDemoScenario('RB-208')}
+          className="gov-btn-primary text-xs bg-[#991b1b] hover:bg-[#7f1d1d] border-[#7f1d1d]"
+        >
+          Load Ghost Query (RB-208) →
+        </button>
+      </div>
+
       {/* Preset Buttons for Demo */}
       <div className="bg-[#f0f9ff] border border-[#0284c7] p-2.5 text-xs flex flex-wrap items-center justify-between gap-2">
         <div className="font-bold text-[#0369a1]">

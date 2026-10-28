@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import VoiceAssistantModal from '@/components/VoiceAssistantModal';
+import ComplaintChatbot from '@/components/ComplaintChatbot';
 
 export const metadata: Metadata = {
   title: 'AICTE Unified Case Coordination Radar',
@@ -28,6 +29,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <VoiceAssistantModal />
+          <ComplaintChatbot />
         </AppProvider>
       </body>
     </html>

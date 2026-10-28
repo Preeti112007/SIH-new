@@ -5,54 +5,68 @@ import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 
 export default function Header() {
-  const { currentUser, switchUser, fontSize, setFontSize, language, setLanguage, setVoiceModalOpen } = useApp();
+  const {
+    currentUser,
+    switchUser,
+    fontSize,
+    increaseFontSize,
+    decreaseFontSize,
+    resetFontSize,
+    language,
+    setLanguage,
+    setVoiceModalOpen,
+    t,
+  } = useApp();
 
   return (
     <header className="bg-white border-b border-gray-300 no-print">
       {/* Top Accessibility & Language Bar */}
       <div className="bg-[#f4f6f8] border-b border-gray-300 text-[12px] text-gray-700 px-4 py-1 flex flex-wrap justify-between items-center">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           <a
             href="#main-content"
             className="text-[#002147] hover:underline font-bold focus:outline-none focus:ring-1 focus:ring-[#002147]"
           >
-            Skip to Main Content
+            {t.skipToMain}
           </a>
           <span className="text-gray-400">|</span>
           <button
-            onClick={() => alert('Screen Reader Access Enabled. Layout optimized for assistive readers.')}
+            onClick={() => alert('Screen Reader Access Enabled. Layout conforms to GIGW accessibility standards.')}
             className="hover:underline text-gray-700"
           >
-            Screen Reader Access
+            {t.screenReader}
           </button>
         </div>
 
         <div className="flex items-center space-x-3">
-          {/* Text Size Adjustments */}
-          <span className="font-semibold text-gray-600">Text Size:</span>
+          {/* Continuous Text Size Adjustments: A-, A (Reset), A+ */}
+          <span className="font-semibold text-gray-600">{t.textSize}</span>
           <div className="inline-flex border border-gray-400 bg-white">
             <button
-              onClick={() => setFontSize(90)}
-              className={`px-2 py-0.5 border-r border-gray-300 text-xs font-bold ${fontSize === 90 ? 'bg-[#002147] text-white' : 'hover:bg-gray-100'}`}
-              title="Decrease Font Size"
+              onClick={decreaseFontSize}
+              className="px-2 py-0.5 border-r border-gray-300 text-xs font-bold hover:bg-[#002147] hover:text-white transition-colors"
+              title="Decrease Font Size (Click repeatedly to reduce)"
             >
               A−
             </button>
             <button
-              onClick={() => setFontSize(100)}
+              onClick={resetFontSize}
               className={`px-2 py-0.5 border-r border-gray-300 text-xs font-bold ${fontSize === 100 ? 'bg-[#002147] text-white' : 'hover:bg-gray-100'}`}
-              title="Default Font Size"
+              title="Reset to Normal Font Size (100%)"
             >
               A
             </button>
             <button
-              onClick={() => setFontSize(115)}
-              className={`px-2 py-0.5 text-xs font-bold ${fontSize === 115 ? 'bg-[#002147] text-white' : 'hover:bg-gray-100'}`}
-              title="Increase Font Size"
+              onClick={increaseFontSize}
+              className="px-2 py-0.5 text-xs font-bold hover:bg-[#002147] hover:text-white transition-colors"
+              title="Increase Font Size (Click continuously to enlarge)"
             >
               A+
             </button>
           </div>
+          {fontSize !== 100 && (
+            <span className="text-[11px] text-gray-500 font-bold">({fontSize}%)</span>
+          )}
 
           <span className="text-gray-400">|</span>
 
@@ -63,14 +77,16 @@ export default function Header() {
             title="BHASHINI Multilingual Voice Assistant"
           >
             <span>🎙️</span>
-            <span>BHASHINI Voice</span>
+            <span>{t.voiceAssistant}</span>
           </button>
 
           <span className="text-gray-400">|</span>
 
-          {/* Language Selector */}
+          {/* Language Selector: Explicitly labelled "Language:" not "Lang" */}
           <div className="inline-flex items-center space-x-1">
-            <label htmlFor="lang-select" className="font-semibold text-gray-600">Lang:</label>
+            <label htmlFor="lang-select" className="font-semibold text-gray-600">
+              {t.languageLabel}
+            </label>
             <select
               id="lang-select"
               value={language}
@@ -78,8 +94,11 @@ export default function Header() {
               className="border border-gray-400 bg-white px-1.5 py-0.5 text-xs font-bold text-[#002147]"
             >
               <option value="en">English</option>
-              <option value="hi">हिन्दी (Hindi)</option>
               <option value="kn">ಕನ್ನಡ (Kannada)</option>
+              <option value="hi">हिन्दी (Hindi)</option>
+              <option value="ta">தமிழ் (Tamil)</option>
+              <option value="te">తెలుగు (Telugu)</option>
+              <option value="mr">मराठी (Marathi)</option>
             </select>
           </div>
         </div>
@@ -88,8 +107,8 @@ export default function Header() {
       {/* Main Government Portal Header Area */}
       <div className="px-5 py-3 flex flex-wrap justify-between items-center bg-white border-b border-gray-200">
         <div className="flex items-center space-x-4">
-          {/* Emblem of India / Ashoka Stambh SVG Placeholder */}
-          <div className="w-14 h-14 flex flex-col items-center justify-center border border-gray-300 bg-[#fbfbfb] p-1 text-center">
+          {/* Emblem of India / Ashoka Stambh Seal */}
+          <div className="w-14 h-14 flex flex-col items-center justify-center border border-gray-400 bg-[#fafafa] p-1 text-center shrink-0">
             <svg
               className="w-8 h-8 text-[#002147]"
               viewBox="0 0 24 24"
@@ -106,17 +125,13 @@ export default function Header() {
 
           <div>
             <div className="text-[12px] font-bold uppercase tracking-wider text-gray-600">
-              {language === 'hi' ? 'शिक्षा मंत्रालय, भारत सरकार' : language === 'kn' ? 'ಶಿಕ್ಷಣ ಸಚಿವಾಲಯ, ಭಾರತ ಸರ್ಕಾರ' : 'Ministry of Education, Government of India'}
+              {t.ministryName}
             </div>
             <h1 className="text-[20px] font-bold text-[#002147] tracking-tight leading-tight m-0 p-0">
-              {language === 'hi'
-                ? 'अखिल भारतीय तकनीकी शिक्षा परिषद'
-                : language === 'kn'
-                ? 'ಅಖಿಲ ಭಾರತ ತಾಂತ್ರಿಕ ಶಿಕ್ಷಣ ಮಂಡಳಿ'
-                : 'All India Council for Technical Education'}
+              {t.aicteName}
             </h1>
             <div className="text-[13px] font-semibold text-[#800000]">
-              Unified Case Coordination Radar & Grievance Monitoring Platform
+              {t.portalSubtitle}
             </div>
           </div>
         </div>
@@ -124,11 +139,11 @@ export default function Header() {
         {/* Prototype Notice & Role Switcher */}
         <div className="flex flex-col items-end space-y-1.5 mt-2 sm:mt-0">
           <div className="bg-[#fffbeb] border border-[#f59e0b] px-2.5 py-1 text-[11.5px] text-[#92400e] font-semibold">
-            <span className="font-bold text-[#b45309]">Demonstration Prototype</span> | All records and institutions shown are synthetic.
+            <span className="font-bold text-[#b45309]">{t.demoPrototypeNotice}</span> | {t.syntheticNotice}
           </div>
 
           <div className="flex items-center space-x-3 text-[12.5px]">
-            <span className="text-gray-600">Logged in as:</span>
+            <span className="text-gray-600">{t.loggedInAs}</span>
             <span className="font-bold text-[#002147] bg-[#f1f5f9] px-2 py-0.5 border border-gray-300">
               {currentUser.fullName} ({currentUser.role})
             </span>
@@ -140,8 +155,8 @@ export default function Header() {
               className="border border-[#002147] bg-white text-[#002147] font-bold text-xs px-2 py-0.5"
               title="Switch demo profile"
             >
-              <option value="Officer">Role: Grievance Officer (Dr. Sharma)</option>
-              <option value="Administrator">Role: System Admin (Sri Arvind Kumar)</option>
+              <option value="Officer">{t.roleOfficer}</option>
+              <option value="Administrator">{t.roleAdmin}</option>
             </select>
           </div>
         </div>
