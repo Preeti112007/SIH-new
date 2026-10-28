@@ -66,10 +66,6 @@ export default function DashboardPage() {
 
   return (
     <div className="print-dossier space-y-3.5">
-      <div className="no-print">
-        <Breadcrumbs items={[{ label: t.navDashboard }]} />
-      </div>
-
       {/* Welcome & Officer Control Bar with 2 Mandatory Action Buttons (PROMPT 4 & 5) */}
       <div className="gov-panel p-3 bg-white flex flex-wrap justify-between items-center border border-gray-300">
         <div>
